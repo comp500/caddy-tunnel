@@ -21,11 +21,18 @@ func setup(c *caddy.Controller) error {
 			return c.ArgErr()
 		}
 
-		// TODO: implement options
-		// for c.NextBlock() {
-		// 	directive := c.Val()
-		// 	args := c.RemainingArgs()
-		// }
+		for c.NextBlock() {
+			directive := c.Val()
+
+			switch directive {
+			case "protocol":
+				if !c.Args(&server.UpstreamProto) {
+					return c.ArgErr()
+				}
+			default:
+				return c.ArgErr()
+			}
+		}
 	}
 
 	cfg := httpserver.GetConfig(c)
