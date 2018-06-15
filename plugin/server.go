@@ -12,20 +12,14 @@ import (
 // Server is a httpserver.Handler that handles TCP/UDP tunneling requests.
 type Server struct {
 	NextHandler httpserver.Handler
-	requestPath string // Temporary, remove when configuration system done
+	RequestPath string // Temporary, remove when configuration system done
+	Upstream    string
 }
 
-// TODO: don't use this horrible function
-func handleErr(err error) {
-	if err != nil {
-		log.Fatalf("%s\n", err)
-	}
-}
-
-// Serves SSTP requests. See httpserver.Handler.
+// Serves HTTP requests for tunneling. See httpserver.Handler.
 func (s Server) ServeHTTP(w http.ResponseWriter, r *http.Request) (int, error) {
 	if r.Method == http.MethodGet {
-		if httpserver.Path(r.URL.Path).Matches(s.requestPath) {
+		if httpserver.Path(r.URL.Path).Matches(s.RequestPath) {
 			log.Print("Got a http request") // TODO: Remove
 
 			flusher, ok := w.(http.Flusher)
@@ -64,7 +58,6 @@ func (s Server) ServeHTTP(w http.ResponseWriter, r *http.Request) (int, error) {
 			return 0, nil
 		}
 	}
-	log.Print("Got a request")
 	return s.NextHandler.ServeHTTP(w, r)
 }
 

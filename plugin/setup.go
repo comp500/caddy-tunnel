@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	caddy.RegisterPlugin("sstp", caddy.Plugin{
+	caddy.RegisterPlugin("tunnel", caddy.Plugin{
 		ServerType: "http",
 		Action:     setup,
 	})
@@ -17,12 +17,15 @@ func setup(c *caddy.Controller) error {
 	server := &Server{}
 
 	for c.Next() { // skip the directive name
-		for c.NextBlock() {
-			directive := c.Val()
-			args := c.RemainingArgs()
-			_ = args
-			server.requestPath = directive
+		if !c.Args(&server.RequestPath, &server.Upstream) {
+			return c.ArgErr()
 		}
+
+		// TODO: implement options
+		// for c.NextBlock() {
+		// 	directive := c.Val()
+		// 	args := c.RemainingArgs()
+		// }
 	}
 
 	cfg := httpserver.GetConfig(c)
