@@ -6,7 +6,6 @@ import (
 	"io"
 	"net"
 	"net/http"
-	"strings"
 
 	"github.com/mholt/caddy/caddyhttp/httpserver"
 )
@@ -68,9 +67,6 @@ type parseReturn struct {
 
 // Handles TCP/UDP connection within HTTP
 func (s Server) handleConnection(r io.ReadCloser, w io.Writer) {
-	w.Write([]byte("HI"))
-	io.WriteString(w, strings.Repeat("# xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n", 15))
-
 	proto := s.UpstreamProto
 	if len(proto) == 0 {
 		proto = "tcp"
