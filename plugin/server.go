@@ -7,7 +7,7 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/mholt/caddy/caddyhttp/httpserver"
+	"github.com/caddyserver/caddy/caddyhttp/httpserver"
 )
 
 // Server is a httpserver.Handler that handles TCP/UDP tunneling requests.
